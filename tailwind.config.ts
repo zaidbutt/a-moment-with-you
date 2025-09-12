@@ -22,6 +22,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          soft: "hsl(var(--primary-soft))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -46,6 +47,16 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Storytelling-specific colors
+        story: {
+          header: "hsl(var(--story-header))",
+        },
+        chapter: {
+          accent: "hsl(var(--chapter-accent))",
+        },
+        moment: {
+          highlight: "hsl(var(--moment-highlight))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -80,10 +91,47 @@ export default {
             height: "0",
           },
         },
+        "fade-in": {
+          from: {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "slide-up": {
+          from: {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.5s ease-out",
+        "slide-up": "slide-up 0.4s ease-out",
+      },
+      backgroundImage: {
+        "gradient-story": "var(--gradient-story)",
+        "gradient-chapter": "var(--gradient-chapter)",
+        "gradient-moment": "var(--gradient-moment)",
+        "gradient-hero": "var(--gradient-hero)",
+      },
+      boxShadow: {
+        "story": "var(--shadow-story)",
+        "card": "var(--shadow-card)",
+        "subtle": "var(--shadow-subtle)",
+      },
+      transitionTimingFunction: {
+        "gentle": "var(--transition-gentle)",
+        "story": "var(--transition-story)",
       },
     },
   },
