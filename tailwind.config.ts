@@ -48,7 +48,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Storytelling-specific colors
+        // Brand-specific colors
         story: {
           header: "hsl(var(--story-header))",
         },
@@ -57,6 +57,9 @@ export default {
         },
         moment: {
           highlight: "hsl(var(--moment-highlight))",
+        },
+        brand: {
+          blue: "hsl(var(--brand-blue))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -68,6 +71,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        brand: ['Oxygen', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",

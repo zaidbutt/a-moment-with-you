@@ -2,61 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* A Moment With - Storytelling Design System
-Warm, memory-evoking colors that create an intimate storytelling atmosphere
+/* A Moment With - Official Brand Design System
+Clean, optimistic, inviting, and minimal - following brand guidelines v4
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 32 20% 97%;
-    --foreground: 25 15% 15%;
+    --background: 0 0% 91%;
+    --foreground: 286 60% 13%;
 
-    --card: 30 25% 98%;
-    --card-foreground: 25 15% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 286 60% 13%;
 
-    --popover: 30 25% 98%;
-    --popover-foreground: 25 15% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 286 60% 13%;
 
-    /* Warm storytelling primary - deep amber/bronze */
-    --primary: 25 45% 35%;
-    --primary-foreground: 30 25% 98%;
-    --primary-soft: 25 35% 85%;
+    /* Primary - Deep Purple from brand guide */
+    --primary: 286 60% 13%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 294 53% 66%;
 
-    /* Soft secondary - warm cream */
-    --secondary: 35 30% 92%;
-    --secondary-foreground: 25 25% 25%;
+    /* Secondary - Light Gray */
+    --secondary: 0 0% 71%;
+    --secondary-foreground: 286 60% 13%;
 
-    /* Muted storytelling tones */
-    --muted: 35 20% 90%;
-    --muted-foreground: 25 12% 45%;
+    /* Muted tones */
+    --muted: 0 0% 91%;
+    --muted-foreground: 0 0% 71%;
 
-    /* Gentle accent - soft coral */
-    --accent: 15 50% 88%;
-    --accent-foreground: 25 25% 25%;
+    /* Accent - Light Purple */
+    --accent: 294 53% 66%;
+    --accent-foreground: 286 60% 13%;
 
     --destructive: 0 65% 55%;
-    --destructive-foreground: 30 25% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 35 15% 85%;
-    --input: 35 15% 88%;
-    --ring: 25 45% 35%;
+    --border: 0 0% 71%;
+    --input: 0 0% 91%;
+    --ring: 286 60% 13%;
 
-    /* Storytelling-specific tokens */
-    --story-header: 20 35% 25%;
-    --chapter-accent: 40 40% 75%;
-    --moment-highlight: 15 45% 80%;
+    /* Brand-specific tokens */
+    --story-header: 286 60% 13%;
+    --chapter-accent: 294 53% 66%;
+    --moment-highlight: 188 11% 61%;
+    --brand-blue: 205 93% 39%;
     
-    /* Beautiful gradients for storytelling */
-    --gradient-story: linear-gradient(135deg, hsl(25 45% 35%), hsl(20 40% 45%));
-    --gradient-chapter: linear-gradient(120deg, hsl(35 30% 92%), hsl(40 35% 88%));
-    --gradient-moment: linear-gradient(90deg, hsl(15 50% 88%), hsl(25 45% 85%));
-    --gradient-hero: linear-gradient(135deg, hsl(32 20% 97%), hsl(35 25% 94%));
+    /* Clean brand gradients */
+    --gradient-story: linear-gradient(135deg, hsl(286 60% 13%), hsl(294 53% 66%));
+    --gradient-chapter: linear-gradient(120deg, hsl(0 0% 91%), hsl(0 0% 100%));
+    --gradient-moment: linear-gradient(90deg, hsl(294 53% 66%), hsl(188 11% 61%));
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 91%), hsl(0 0% 100%));
     
-    /* Elegant shadows */
-    --shadow-story: 0 8px 32px -8px hsl(25 45% 35% / 0.15);
-    --shadow-card: 0 4px 20px -4px hsl(25 25% 25% / 0.08);
-    --shadow-subtle: 0 2px 12px -2px hsl(25 15% 15% / 0.05);
+    /* Minimal shadows */
+    --shadow-story: 0 4px 20px -4px hsl(286 60% 13% / 0.15);
+    --shadow-card: 0 2px 12px -2px hsl(286 60% 13% / 0.08);
+    --shadow-subtle: 0 1px 6px -1px hsl(286 60% 13% / 0.05);
     
     /* Smooth transitions */
     --transition-gentle: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
