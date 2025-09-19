@@ -18,7 +18,8 @@ interface Story {
 const Dashboard = () => {
   const navigate = useNavigate();
   // Sample data - in real app this would come from your backend
-  const recentStories: Story[] = [
+  // Changing Color Schemes
+  const recentStories: Story[ ] = [
     {
       id: '1',
       title: 'Growing Up in Nashville',
