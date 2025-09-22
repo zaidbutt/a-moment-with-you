@@ -18,16 +18,50 @@ const Login = () => {
     confirmPassword: ''
   });
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Login form submitted:', loginForm);
-    // Add your login logic here
+    
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginForm),
+      });
+      
+      if (response.ok) {
+        console.log('Login successful');
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.log('Login error:', error);
+    }
   };
 
-  const handleSignupSubmit = (e: React.FormEvent) => {
+  const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Signup form submitted:', signupForm);
-    // Add your signup logic here
+    
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signupForm),
+      });
+      
+      if (response.ok) {
+        console.log('Signup successful');
+      } else {
+        console.log('Signup failed');
+      }
+    } catch (error) {
+      console.log('Signup error:', error);
+    }
   };
 
   return (
