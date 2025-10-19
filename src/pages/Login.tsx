@@ -1,66 +1,91 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: ''
   });
 
   const [signupForm, setSignupForm] = useState({
+    name: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
 
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) navigate('/');
+    };
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) navigate('/');
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login form submitted:', loginForm);
+    setLoading(true);
     
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginForm),
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginForm.email,
+        password: loginForm.password,
       });
       
-      if (response.ok) {
-        console.log('Login successful');
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.log('Login error:', error);
+      if (error) throw error;
+      toast({ title: 'Success', description: 'Logged in successfully' });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Signup form submitted:', signupForm);
+    
+    if (signupForm.password !== signupForm.confirmPassword) {
+      toast({ title: 'Error', description: 'Passwords do not match', variant: 'destructive' });
+      return;
+    }
+
+    setLoading(true);
     
     try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const { error } = await supabase.auth.signUp({
+        email: signupForm.email,
+        password: signupForm.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: { name: signupForm.name, last_name: signupForm.lastName },
         },
-        body: JSON.stringify(signupForm),
       });
       
-      if (response.ok) {
-        console.log('Signup successful');
-      } else {
-        console.log('Signup failed');
-      }
-    } catch (error) {
-      console.log('Signup error:', error);
+      if (error) throw error;
+      toast({ title: 'Success', description: 'Account created! You can now log in.' });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,17 +94,15 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="text-2xl font-brand font-bold text-primary hover:text-primary-soft transition-gentle">
-            A Moment With
+            Story Platform
           </Link>
-          <p className="text-muted-foreground mt-2">Welcome back to your story collection</p>
+          <p className="text-muted-foreground mt-2">Create and share your life stories</p>
         </div>
 
         <Card className="shadow-card">
           <CardHeader className="text-center">
-            <CardTitle className="text-xl text-story-header">Access Your Account</CardTitle>
-            <CardDescription>
-              Sign in to your existing account or create a new one
-            </CardDescription>
+            <CardTitle className="text-xl">Access Your Account</CardTitle>
+            <CardDescription>Sign in or create a new account</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
@@ -95,10 +118,10 @@ const Login = () => {
                     <Input
                       id="login-email"
                       type="email"
-                      placeholder="Enter your email"
                       value={loginForm.email}
                       onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
                       required
+                      disabled={loading}
                     />
                   </div>
                   <div className="space-y-2">
@@ -106,34 +129,52 @@ const Login = () => {
                     <Input
                       id="login-password"
                       type="password"
-                      placeholder="Enter your password"
                       value={loginForm.password}
                       onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
                       required
+                      disabled={loading}
                     />
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Sign In
                   </Button>
                 </form>
-                <div className="text-center">
-                  <a href="#" className="text-sm text-accent hover:text-primary transition-gentle">
-                    Forgot your password?
-                  </a>
-                </div>
               </TabsContent>
               
               <TabsContent value="signup" className="space-y-4 mt-6">
                 <form onSubmit={handleSignupSubmit} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-name">First Name</Label>
+                      <Input
+                        id="signup-name"
+                        value={signupForm.name}
+                        onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-lastname">Last Name</Label>
+                      <Input
+                        id="signup-lastname"
+                        value={signupForm.lastName}
+                        onChange={(e) => setSignupForm(prev => ({ ...prev, lastName: e.target.value }))}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
                       id="signup-email"
                       type="email"
-                      placeholder="Enter your email"
                       value={signupForm.email}
                       onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
                       required
+                      disabled={loading}
                     />
                   </div>
                   <div className="space-y-2">
@@ -141,10 +182,10 @@ const Login = () => {
                     <Input
                       id="signup-password"
                       type="password"
-                      placeholder="Create a password"
                       value={signupForm.password}
                       onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
                       required
+                      disabled={loading}
                     />
                   </div>
                   <div className="space-y-2">
@@ -152,38 +193,21 @@ const Login = () => {
                     <Input
                       id="confirm-password"
                       type="password"
-                      placeholder="Confirm your password"
                       value={signupForm.confirmPassword}
                       onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
                       required
+                      disabled={loading}
                     />
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Create Account
                   </Button>
                 </form>
-                <div className="text-center">
-                  <p className="text-xs text-muted-foreground">
-                    By signing up, you agree to our{' '}
-                    <a href="#" className="text-accent hover:text-primary transition-gentle">
-                      Terms of Service
-                    </a>{' '}
-                    and{' '}
-                    <a href="#" className="text-accent hover:text-primary transition-gentle">
-                      Privacy Policy
-                    </a>
-                  </p>
-                </div>
               </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
-        
-        <div className="text-center mt-6">
-          <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-gentle">
-            ← Back to Home
-          </Link>
-        </div>
       </div>
     </div>
   );
